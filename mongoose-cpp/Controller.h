@@ -12,10 +12,10 @@
 using namespace std;
 
 #define addRoute(httpMethod, url, controllerType, method) \
-    registerRoute(httpMethod, url, new RequestHandler<controllerType, StreamResponse>(this, &controllerType::method ));
+    registerRoute(httpMethod, url, new Mongoose::RequestHandler<controllerType, StreamResponse>(this, &controllerType::method ));
 
 #define addRouteResponse(httpMethod, url, controllerType, method, responseType) \
-    registerRoute(httpMethod, url, new RequestHandler<controllerType, responseType>(this, &controllerType::method ));
+    registerRoute(httpMethod, url, new Mongoose::RequestHandler<controllerType, responseType>(this, &controllerType::method ));
 
 /**
  * A controller is a module that respond to requests
