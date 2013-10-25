@@ -1,8 +1,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <mongoose/Server.h>
-#include <mongoose/JsonController.h>
+#include <mongoose-cpp/Server.h>
+#include <mongoose-cpp/JsonController.h>
 
 using namespace std;
 using namespace Mongoose;

@@ -5,8 +5,8 @@
 #include <time.h>
 #endif
 #include <signal.h>
-#include <mongoose/Server.h>
-#include <mongoose/WebController.h>
+#include <mongoose-cpp/Server.h>
+#include <mongoose-cpp/WebController.h>
 
 using namespace std;
 using namespace Mongoose;

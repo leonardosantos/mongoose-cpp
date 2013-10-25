@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
-project (mongoose)
+project (mongoose-cpp)
 find_package (Threads)
 
 option (MAIN
@@ -30,7 +30,7 @@ set (SOURCES
     mongoose.c
     )
 
-set (MONGOOSE_CPP "${PROJECT_SOURCE_DIR}/mongoose")
+set (MONGOOSE_CPP "${PROJECT_SOURCE_DIR}/mongoose-cpp")
 
 include_directories ("${PROJECT_SOURCE_DIR}")
 

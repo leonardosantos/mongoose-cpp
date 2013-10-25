@@ -26,8 +26,8 @@ the string "Hello bob". Default parameter value, if not provided, will be
 ```c++
 #include <stdlib.h>
 #include <signal.h>
-#include <mongoose/Server.h>
-#include <mongoose/WebController.h>
+#include <mongoose-cpp/Server.h>
+#include <mongoose-cpp/WebController.h>
 
 using namespace std;
 using namespace Mongoose;
@@ -89,7 +89,7 @@ Note that this depends on C++11.
 
 # Development
 
-The code writing take places in the `mongoose/` directory and the whole repository
+The code writing take places in the `mongoose-cpp/` directory and the whole repository
 will be merged as often as possible from the original mongoose project.
 
 # License
