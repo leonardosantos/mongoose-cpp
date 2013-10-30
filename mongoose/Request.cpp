@@ -16,6 +16,11 @@ namespace Mongoose
         url = string(request->uri);
         method = string(request->request_method);
 
+        headers = map<string, string>();
+        for (int h=0; h < 64; h++)
+          if (request->http_headers[h].name)
+            headers[string(request->http_headers[h].name)] = string(request->http_headers[h].value);
+
         // Downloading POST data
         ostringstream postData;
         const char * content_type = mg_get_header(connection, "Content-Type");
@@ -187,5 +192,9 @@ namespace Mongoose
     void Request::upload(string targetDirectory)
     {
         mg_upload(connection, targetDirectory.c_str());
+    }
+
+    map<string, string> Request::getHeaders(){
+      return headers;
     }
 };

@@ -88,7 +88,10 @@ namespace Mongoose
              */
             vector<UploadFile> uploadFiles;
 
+            map<string, string> getHeaders();
+
         protected:
+            map<string, string> headers;
             string data;
             string method;
             string url;
