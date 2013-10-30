@@ -16,10 +16,13 @@ namespace Mongoose
         url = string(request->uri);
         method = string(request->request_method);
 
+        // Loading Headers
         headers = map<string, string>();
-        for (int h=0; h < 64; h++)
-          if (request->http_headers[h].name)
-            headers[string(request->http_headers[h].name)] = string(request->http_headers[h].value);
+        for (int h=0; h < 64; h++){
+          const char* header_name = request->http_headers[h].name;
+          if (header_name && strlen(header_name))
+            headers[string(header_name)] = string(request->http_headers[h].value);
+        }
 
         // Downloading POST data
         ostringstream postData;
