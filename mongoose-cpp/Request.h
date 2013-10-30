@@ -7,6 +7,9 @@
 #ifdef ENABLE_REGEX_URL
     #include <regex>
 #endif
+#ifdef HAS_JSONCPP
+    #include <json/json.h>
+#endif
 #include <mongoose.h>
 #include <mongoose-cpp/Common.h>
 #include <mongoose-cpp/UploadFile.h>
@@ -50,6 +53,14 @@ namespace Mongoose
              */
             string get(string key, string fallback = "");
 
+#ifdef HAS_JSONCPP
+            /**
+             * Get the payload data as json
+             *
+             * @return the Json::Value of the payload data
+             */
+            Json::Value json_data();
+#endif
             /**
              * Checks if the given cookie exists
              *
