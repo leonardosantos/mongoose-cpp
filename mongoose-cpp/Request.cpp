@@ -145,10 +145,14 @@ namespace Mongoose
 #ifdef HAS_JSONCPP
     Json::Value Request::json_data()
     {
-        Json::Value root;
-        Json::Reader reader;
-        reader.parse(data, root, false);
-        return root;
+        try{
+            Json::Value root;
+            Json::Reader reader;
+            reader.parse(data, root, false);
+            return root;
+        } catch(std::exception&) {
+            return NULL;
+        }
     }
 #endif
 
