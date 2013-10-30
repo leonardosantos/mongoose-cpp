@@ -19,7 +19,15 @@ namespace Mongoose
         // Downloading POST data
         ostringstream postData;
         const char * content_type = mg_get_header(connection, "Content-Type");
-        if (content_type!= NULL && strcmp(content_type, "application/x-www-form-urlencoded") == 0) {
+
+#ifdef HAS_JSONCPP
+        const char * json_content_type = "application/json";
+        if (content_type!= NULL && 
+            (strcmp(content_type, "application/x-www-form-urlencoded") == 0 ||
+             strncmp(content_type, json_content_type, strlen(json_content_type)) == 0)){
+#else
+        if (content_type!= NULL && strcmp(content_type, "application/x-www-form-urlencoded") == 0){
+#endif
             int n;
             char post[1024];
             while (n = mg_read(connection, post, sizeof(post))) {
@@ -125,6 +133,16 @@ namespace Mongoose
 
         return fallback;
     }
+
+#ifdef HAS_JSONCPP
+    Json::Value Request::json_data()
+    {
+        Json::Value root;
+        Json::Reader reader;
+        reader.parse(data, root, false);
+        return root;
+    }
+#endif
 
     bool Request::hasCookie(string key)
     {
