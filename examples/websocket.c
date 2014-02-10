@@ -1,44 +1,50 @@
-// Copyright (c) 2004-2012 Sergey Lyubka
-// This file is a part of mongoose project, http://github.com/valenok/mongoose
-
-#include <stdio.h>
 #include <string.h>
 #include "mongoose.h"
 
-static void websocket_ready_handler(struct mg_connection *conn) {
-  static const char *message = "server ready";
-  mg_websocket_write(conn, WEBSOCKET_OPCODE_TEXT, message, strlen(message));
+extern const char *find_embedded_file(const char *, size_t *);
+
+static int iterate_callback(struct mg_connection *c) {
+  if (c->is_websocket) {
+    char buf[20];
+    int len = snprintf(buf, sizeof(buf), "%d", * (int *) c->connection_param);
+    mg_websocket_write(c, 1, buf, len);
+  }
+  return 1;
 }
 
-// Arguments:
-//   flags: first byte of websocket frame, see websocket RFC,
-//          http://tools.ietf.org/html/rfc6455, section 5.2
-//   data, data_len: payload data. Mask, if any, is already applied.
-static int websocket_data_handler(struct mg_connection *conn, int flags,
-                                  char *data, size_t data_len) {
-  (void) flags; // Unused
-  mg_websocket_write(conn, WEBSOCKET_OPCODE_TEXT, data, data_len);
+static int index_html(struct mg_connection *conn) {
+  size_t index_size;
+  const char *index_html = find_embedded_file("websocket.html", &index_size);
 
-  // Returning zero means stoping websocket conversation.
-  // Close the conversation if client has sent us "exit" string.
-  return memcmp(data, "exit", 4);
+  if (conn->is_websocket) {
+    // This handler is called for each incoming websocket frame, one or more
+    // times for connection lifetime.
+    // Echo websocket data back to the client.
+    mg_websocket_write(conn, 1, conn->content, conn->content_len);
+    return conn->content_len == 4 && !memcmp(conn->content, "exit", 4);
+  } else {
+    mg_send_header(conn, "Content-Type", "text/html");
+    mg_send_data(conn, index_html, index_size);
+    return 1;
+  }
 }
 
 int main(void) {
-  struct mg_context *ctx;
-  struct mg_callbacks callbacks;
-  const char *options[] = {
-    "listening_ports", "8080",
-    "document_root", "websocket_html_root",
-    NULL
-  };
+  struct mg_server *server = mg_create_server(NULL);
+  unsigned int current_timer = 0, last_timer = 0;
 
-  memset(&callbacks, 0, sizeof(callbacks));
-  callbacks.websocket_ready = websocket_ready_handler;
-  callbacks.websocket_data = websocket_data_handler;
-  ctx = mg_start(&callbacks, NULL, options);
-  getchar();  // Wait until user hits "enter"
-  mg_stop(ctx);
+  mg_set_option(server, "listening_port", "8080");
+  mg_add_uri_handler(server, "/", index_html);
 
+  printf("Started on port %s\n", mg_get_option(server, "listening_port"));
+  for (;;) {
+    current_timer = mg_poll_server(server, 100);
+    if (current_timer - last_timer > 1) {
+      last_timer = current_timer;
+      mg_iterate_over_connections(server, iterate_callback, &current_timer);
+    }
+  }
+
+  mg_destroy_server(&server);
   return 0;
 }

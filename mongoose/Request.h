@@ -5,7 +5,7 @@
 #include <sstream>
 #include <vector>
 #ifdef ENABLE_REGEX_URL
-    #include <regex>
+#include <regex>
 #endif
 #include <mongoose.h>
 #include "UploadFile.h"
@@ -72,11 +72,14 @@ namespace Mongoose
              * Handle uploads to the target directory
              *
              * @param string the target directory
+             * @param path the posted file path
              */
-            void upload(string targetDirectory);
+            void handleUploads();
 
             string getUrl();
             string getMethod();
+            string getData();
+
 #ifdef ENABLE_REGEX_URL
             smatch getMatches();
             bool match(string pattern);
@@ -89,16 +92,11 @@ namespace Mongoose
             vector<UploadFile> uploadFiles;
 
         protected:
-            string data;
             string method;
             string url;
-#ifdef ENABLE_REGEX_URL
-            string key;
-            smatch matches;
-#endif
+            string data;
             struct mg_connection *connection;
-            struct mg_request_info *request;
     };
-};
+}
 
 #endif
