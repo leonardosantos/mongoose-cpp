@@ -12,13 +12,12 @@
 #define HTTP_FORBIDDEN 403
 #define HTTP_SERVER_ERROR 500
 
-using namespace std;
-
 /**
  * A response to a request
  */
 namespace Mongoose
 {
+    using namespace std;
     class MONGOOSE_CPP_EXPORT Response 
     {
         public:

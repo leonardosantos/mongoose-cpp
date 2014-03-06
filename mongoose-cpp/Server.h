@@ -12,13 +12,12 @@
 #include <mongoose-cpp/WebSockets.h>
 #include <mongoose-cpp/Mutex.h>
 
-using namespace std;
-
 /**
  * Wrapper for the Mongoose server
  */
 namespace Mongoose
 {
+    using namespace std;
     class MONGOOSE_CPP_EXPORT Server
     {
         public:
