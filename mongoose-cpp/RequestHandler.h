@@ -46,6 +46,6 @@ namespace Mongoose
             T *controller;
             fPtr function;
     };
-};
+}
 
 #endif

@@ -75,6 +75,6 @@ namespace Mongoose
             int code;
             map<string, string> headers;
     };
-};
+}
 
 #endif

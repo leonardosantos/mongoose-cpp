@@ -126,11 +126,15 @@ namespace Mongoose
              */
             virtual Response *serverInternalError(string message);
 
+            bool handles(string method, string url);
+            vector<string> getUrls();
+
         protected:
             Server *server;
             string prefix;
             map<string, RequestHandlerBase*> routes;
+            vector<string> urls;
     };
-};
+}
 
 #endif

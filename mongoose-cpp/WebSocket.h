@@ -10,8 +10,16 @@
 
 using namespace std;
 
-#define WEBSOCKET_TEXT 0x01
-#define WEBSOCKET_FIN  0x80
+#define WEBSOCKET_FIN 0x80
+
+enum {
+    WEBSOCKET_OPCODE_CONTINUATION = 0x0,
+    WEBSOCKET_OPCODE_TEXT = 0x1,
+    WEBSOCKET_OPCODE_BINARY = 0x2,
+    WEBSOCKET_OPCODE_CONNECTION_CLOSE = 0x8,
+    WEBSOCKET_OPCODE_PING = 0x9,
+    WEBSOCKET_OPCODE_PONG = 0xa,
+};
 
 namespace Mongoose
 {
@@ -27,7 +35,7 @@ namespace Mongoose
              *
              * @param string the data to send
              */
-            void send(string data);
+            void send(string data, int opcode = WEBSOCKET_OPCODE_TEXT);
 
             /**
              * Returns the connection request
@@ -110,6 +118,6 @@ namespace Mongoose
 
             vector<WebSockets *> containers;
     };
-};
+}
 
 #endif

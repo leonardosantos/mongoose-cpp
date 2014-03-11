@@ -67,6 +67,6 @@ namespace Mongoose
             time_t date;
             Mutex mutex;
     };
-};
+}
 
 #endif
