@@ -111,6 +111,10 @@ namespace Mongoose
             string url;
             string data;
             struct mg_connection *connection;
+#ifdef ENABLE_REGEX_URL
+            string key;
+            smatch matches;
+#endif
     };
 }
 

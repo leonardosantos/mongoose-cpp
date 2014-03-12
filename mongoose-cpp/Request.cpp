@@ -99,30 +99,15 @@ namespace Mongoose
 
         // Loading Headers
         headers = map<string, string>();
-        for (int h=0; h < 64; h++){
-          const char* header_name = request->http_headers[h].name;
+        for (int h=0; h < 30; h++){
+          const char* header_name = connection->http_headers[h].name;
           if (header_name && strlen(header_name))
-            headers[string(header_name)] = string(request->http_headers[h].value);
+            headers[string(header_name)] = string(connection->http_headers[h].value);
         }
 
         // Downloading POST data
         ostringstream postData;
-        const char * content_type = mg_get_header(connection, "Content-Type");
-
-#ifdef HAS_JSONCPP
-        const char * json_content_type = "application/json";
-        if (content_type!= NULL && 
-            (strcmp(content_type, "application/x-www-form-urlencoded") == 0 ||
-             strncmp(content_type, json_content_type, strlen(json_content_type)) == 0)){
-#else
-        if (content_type!= NULL && strcmp(content_type, "application/x-www-form-urlencoded") == 0){
-#endif
-            int n;
-            char post[1024];
-            while (n = mg_read(connection, post, sizeof(post))) {
-                postData.write(post, n);
-            }
-        }
+        postData.write(connection->content, connection->content_len);
         data = postData.str();
     }
 

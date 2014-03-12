@@ -202,6 +202,10 @@ struct ll { struct ll *prev, *next; };
 #define NO_LOGGING
 #endif
 
+#ifdef _WIN32
+  WSADATA data;
+#endif
+
 union socket_address {
   struct sockaddr sa;
   struct sockaddr_in sin;
@@ -4053,7 +4057,6 @@ struct mg_server *mg_create_server(void *server_data) {
   server->do_i_handle = NULL;
 
 #ifdef _WIN32
-  WSADATA data;
   WSAStartup(MAKEWORD(2, 2), &data);
 #else
   // Ignore SIGPIPE signal, so if browser cancels the request, it

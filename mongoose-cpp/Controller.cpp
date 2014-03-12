@@ -1,4 +1,7 @@
 #include <iostream>
+#ifdef ENABLE_REGEX_URL
+#include <regex>
+#endif
 #include <mongoose-cpp/Controller.h>
 #include <mongoose-cpp/StreamResponse.h>
 
@@ -42,8 +45,16 @@ namespace Mongoose
     bool Controller::handles(string method, string url)
     { 
         string key = method + ":" + url;
-
+#ifdef ENABLE_REGEX_URL
+        smatch matches;
+        map<string, RequestHandlerBase *>::iterator it; 
+        for (it=routes.begin(); it!=routes.end(); it++)
+            if (regex_match(key, matches, regex(it->first)))
+              return true;
+        return false;
+#else
         return (routes.find(key) != routes.end());
+#endif
     }
 
     Response *Controller::process(Request &request)
