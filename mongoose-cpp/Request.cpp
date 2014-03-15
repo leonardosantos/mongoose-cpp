@@ -153,7 +153,7 @@ namespace Mongoose
 
         // Looking on the query string
         dataField = connection->query_string;
-        if (dataField != NULL && mg_get_var(connection, key.c_str(), dummy, 1) != -1) {
+        if (dataField != NULL && mg_get_var(connection, key.c_str(), dummy, 10) != -1) {
             return true;
         }
 
