@@ -6,14 +6,11 @@
 
 using namespace std;
 
-namespace Mongoose
-{
-    class MONGOOSE_CPP_EXPORT Utils
-    {
-        public:
-            string htmlEntities(string data);
-    };
+namespace Mongoose {
+class MONGOOSE_CPP_EXPORT Utils {
+   public:
+    string htmlEntities(string data);
+};
 }
 
 #endif
-

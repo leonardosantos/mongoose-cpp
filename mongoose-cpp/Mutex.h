@@ -13,28 +13,25 @@ typedef HANDLE pthread_mutex_t;
 /**
  * A mutex allow thread-safe operations
  */
-namespace Mongoose
-{
-    class MONGOOSE_CPP_EXPORT Mutex
-    {
-        public:
-            Mutex();
-            virtual ~Mutex();
+namespace Mongoose {
+class MONGOOSE_CPP_EXPORT Mutex {
+   public:
+    Mutex();
+    virtual ~Mutex();
 
-            /**
-             * Locks the mutex
-             */
-            virtual void lock();
+    /**
+     * Locks the mutex
+     */
+    virtual void lock();
 
-            /**
-             * Unlock the mutex
-             */
-            virtual void unlock();
+    /**
+     * Unlock the mutex
+     */
+    virtual void unlock();
 
-        protected:
-            pthread_mutex_t _mutex;
-    };
+   protected:
+    pthread_mutex_t _mutex;
+};
 }
 
 #endif
-

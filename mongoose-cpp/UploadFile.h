@@ -8,22 +8,20 @@ using namespace std;
 /**
  * A file uploaded in a request
  */
-namespace Mongoose
-{
-    class MONGOOSE_CPP_EXPORT UploadFile
-    {
-        public:
-            UploadFile(string filename, string data);
+namespace Mongoose {
+class MONGOOSE_CPP_EXPORT UploadFile {
+   public:
+    UploadFile(string filename, string data);
 
-            string getName();
-            string getData();
+    string getName();
+    string getData();
 
-            void saveTo(string directory);
+    void saveTo(string directory);
 
-        protected:
-            string filename;
-            string data;
-    };
+   protected:
+    string filename;
+    string data;
+};
 }
 
-#endif // _MONGOOSE_CPP_UPLOAD_FILE_H
+#endif  // _MONGOOSE_CPP_UPLOAD_FILE_H

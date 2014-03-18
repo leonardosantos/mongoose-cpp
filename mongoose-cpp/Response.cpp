@@ -3,61 +3,45 @@
 
 using namespace std;
 
-namespace Mongoose
-{
-    Response::Response() : code(HTTP_OK), headers()
-    {
-    };
-            
-    Response::~Response()
-    {
-    }
-            
-    void Response::setHeader(string key, string value)
-    {
-        headers[key] = value;
-    }
+namespace Mongoose {
+Response::Response() : code(HTTP_OK), headers() {};
 
-    bool Response::hasHeader(string key)
-    {
-        return headers.find(key) != headers.end();
-    }
+Response::~Response() {}
 
-    string Response::getData()
-    {
-        string body = getBody();
-        ostringstream data;
+void Response::setHeader(string key, string value) { headers[key] = value; }
 
-        data << "HTTP/1.0 " << code << "\r\n";
+bool Response::hasHeader(string key) { return headers.find(key) != headers.end(); }
 
-        if (!hasHeader("Content-Length")) {
-            ostringstream length;
-            length << body.size();
-            setHeader("Content-Length", length.str());
-        }
+string Response::getData() {
+    string body = getBody();
+    ostringstream data;
 
-        map<string, string>::iterator it;
-        for (it=headers.begin(); it!=headers.end(); it++) {
-            data << (*it).first << ": " << (*it).second << "\r\n";
-        }
+    data << "HTTP/1.0 " << code << "\r\n";
 
-        data << "\r\n";
-
-        data << body;
-
-        return data.str();
+    if (!hasHeader("Content-Length")) {
+        ostringstream length;
+        length << body.size();
+        setHeader("Content-Length", length.str());
     }
 
-    void Response::setCookie(string key, string value)
-    {
-        ostringstream definition;
-        definition << key << "=" << value << "; path=/";
-
-        setHeader("Set-cookie", definition.str());
+    map<string, string>::iterator it;
+    for (it = headers.begin(); it != headers.end(); it++) {
+        data << (*it).first << ": " << (*it).second << "\r\n";
     }
 
-    void Response::setCode(int code_)
-    {
-        code = code_;
-    }
+    data << "\r\n";
+
+    data << body;
+
+    return data.str();
+}
+
+void Response::setCookie(string key, string value) {
+    ostringstream definition;
+    definition << key << "=" << value << "; path=/";
+
+    setHeader("Set-cookie", definition.str());
+}
+
+void Response::setCode(int code_) { code = code_; }
 };
