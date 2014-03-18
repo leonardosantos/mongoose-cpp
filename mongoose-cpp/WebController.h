@@ -6,7 +6,7 @@
 #include <mongoose-cpp/Controller.h>
 #include <mongoose-cpp/Sessions.h>
 #include <mongoose-cpp/Mutex.h>
-#include <mongoose-cpp/StreamResponse.h>
+#include <mongoose-cpp/Response.h>
 #include <mongoose-cpp/Utils.h>
 
 using namespace std;

@@ -54,7 +54,7 @@ if (CPP_BINDING)
         ${MONGOOSE_CPP}/Server.cpp
         ${MONGOOSE_CPP}/Session.cpp
         ${MONGOOSE_CPP}/Sessions.cpp
-        ${MONGOOSE_CPP}/StreamResponse.cpp
+        ${MONGOOSE_CPP}/Response.cpp
         ${MONGOOSE_CPP}/UploadFile.cpp
         ${MONGOOSE_CPP}/WebController.cpp
         )
@@ -62,7 +62,6 @@ if (CPP_BINDING)
     if (HAS_JSONCPP)
         set (SOURCES
             ${SOURCES}
-            ${MONGOOSE_CPP}/JsonResponse.cpp
             ${MONGOOSE_CPP}/JsonController.cpp
             )
 

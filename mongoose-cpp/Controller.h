@@ -6,7 +6,7 @@
 #include <mongoose-cpp/Common.h>
 #include <mongoose-cpp/Request.h>
 #include <mongoose-cpp/RequestHandler.h>
-#include <mongoose-cpp/StreamResponse.h>
+#include <mongoose-cpp/Response.h>
 #include <mongoose-cpp/WebSocket.h>
 
 /**
@@ -140,6 +140,7 @@ class MONGOOSE_CPP_EXPORT Controller {
     map<string, RequestHandlerBase *> routes;
     vector<string> urls;
 };
-}
+
+}  // namespace Mongoose
 
 #endif

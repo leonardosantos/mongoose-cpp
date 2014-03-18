@@ -3,7 +3,7 @@
 #include <regex>
 #endif
 #include <mongoose-cpp/Controller.h>
-#include <mongoose-cpp/StreamResponse.h>
+#include <mongoose-cpp/Response.h>
 
 using namespace std;
 
@@ -94,9 +94,9 @@ void Controller::dumpRoutes() {
 }
 
 Response *Controller::serverInternalError(string message) {
-    StreamResponse *response = new StreamResponse;
+    Response *response = new Response;
 
-    response->setCode(HTTP_SERVER_ERROR);
+    response->setCode(500); //HTTP_SERVER_ERROR
     *response << "[500] Server internal error: " << message;
 
     return response;

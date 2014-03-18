@@ -11,15 +11,15 @@ class MONGOOSE_CPP_EXPORT RequestHandlerBase {
     virtual Response *process(Request &request) = 0;
 };
 
-template <typename T, typename R>
+template <typename T>
 class RequestHandler : public RequestHandlerBase {
    public:
-    typedef void (T::*fPtr)(Request &request, R &response);
+    typedef void (T::*fPtr)(Request &request, Response &response);
 
     RequestHandler(T *controller_, fPtr function_) : controller(controller_), function(function_) {}
 
     Response *process(Request &request) {
-        R *response = new R;
+        Response *response = new Response;
 
         try {
             controller->preProcess(request, *response);

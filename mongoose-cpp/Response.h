@@ -4,23 +4,25 @@
 #include <map>
 #include <sstream>
 #include <iostream>
+#if HAS_JSONCPP
+#include <json/json.h>
+#endif
 
 #include <mongoose-cpp/Common.h>
-
-#define HTTP_OK 200
-#define HTTP_NOT_FOUND 404
-#define HTTP_FORBIDDEN 403
-#define HTTP_SERVER_ERROR 500
 
 /**
  * A response to a request
  */
 namespace Mongoose {
 using namespace std;
-class MONGOOSE_CPP_EXPORT Response {
+class MONGOOSE_CPP_EXPORT Response :
+#if HAS_JSONCPP
+    public Json::Value,
+#endif
+    public ostringstream {
    public:
     Response();
-    virtual ~Response();
+    ~Response();
 
     /**
      * Test if the given header is present
@@ -29,7 +31,7 @@ class MONGOOSE_CPP_EXPORT Response {
      *
      * @return bool true if the header is set
      */
-    virtual bool hasHeader(string key);
+    bool hasHeader(string key);
 
     /**
      * Sets the header
@@ -38,7 +40,7 @@ class MONGOOSE_CPP_EXPORT Response {
      *
      * @param value the header value
      */
-    virtual void setHeader(string key, string value);
+    void setHeader(string key, string value);
 
     /**
      * Get the data of the response, this will contain headers and
@@ -46,14 +48,14 @@ class MONGOOSE_CPP_EXPORT Response {
      *
      * @return string the response data
      */
-    virtual string getData();
+    string getData();
 
     /**
      * Gets the response body
      *
      * @return string the response body
      */
-    virtual string getBody() = 0;
+    string getBody();
 
     /**
      * Sets the cookie, note that you can only define one cookie by request
@@ -62,16 +64,24 @@ class MONGOOSE_CPP_EXPORT Response {
      * @param string the key of the cookie
      * @param string value the cookie value
      */
-    virtual void setCookie(string key, string value);
+    void setCookie(string key, string value);
 
     /**
      * Sets the response code
      */
-    virtual void setCode(int code);
+    void setCode(int code);
+
+    /**
+     * Sets the human readability of the response
+     *
+     * @param bool true for human readable
+     */
+    void setHuman(bool human);
 
    protected:
     int code;
     map<string, string> headers;
+    bool humanReadable;
 };
 }
 

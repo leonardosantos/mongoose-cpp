@@ -4,8 +4,8 @@
 using namespace std;
 
 namespace Mongoose {
-Response::Response() : code(HTTP_OK), headers() {};
 
+Response::Response() : code(200), headers(), humanReadable(false) {};  // HTTP_OK
 Response::~Response() {}
 
 void Response::setHeader(string key, string value) { headers[key] = value; }
@@ -44,4 +44,21 @@ void Response::setCookie(string key, string value) {
 }
 
 void Response::setCode(int code_) { code = code_; }
-};
+
+string Response::getBody() {
+    string s(this->str());
+#if HAS_JSONCPP
+    if (s.empty())
+        if (humanReadable) {
+            Json::StyledWriter writer;
+            return writer.write(*this);
+        } else {
+            Json::FastWriter writer;
+            return writer.write(*this);
+        }
+#endif
+    return s;
+}
+
+void Response::setHuman(bool human) { humanReadable = human; }
+}  // namespace Mongoose

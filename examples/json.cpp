@@ -10,7 +10,7 @@ using namespace Mongoose;
 class MyController : public JsonController
 {
     public: 
-        void hello(Request &request, JsonResponse &response)
+        void hello(Request &request, Response &response)
         {
             int i;
 
@@ -27,8 +27,8 @@ class MyController : public JsonController
             setPrefix("/api");
 
             // Hello demo
-            addRouteResponse("GET", "/", MyController, hello, JsonResponse);
-            addRouteResponse("GET", "/hello", MyController, hello, JsonResponse);
+            registerRoute("GET", "/", new RequestHandler<MyController>(this, &MyController::hello));
+            registerRoute("GET", "/hello", new RequestHandler<MyController>(this, &MyController::hello));
         }
 };
 

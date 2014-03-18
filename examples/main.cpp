@@ -14,12 +14,12 @@ using namespace Mongoose;
 class MyController : public WebController
 {
     public: 
-        void hello(Request &request, StreamResponse &response)
+        void hello(Request &request, Response &response)
         {
             response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
         }
 
-        void form(Request &request, StreamResponse &response)
+        void form(Request &request, Response &response)
         {
             response << "<form method=\"post\">" << endl;
             response << "<input type=\"text\" name=\"test\" /><br >" << endl;
@@ -27,12 +27,12 @@ class MyController : public WebController
             response << "</form>" << endl;
         }
 
-        void formPost(Request &request, StreamResponse &response)
+        void formPost(Request &request, Response &response)
         {
             response << "Test=" << htmlEntities(request.get("test", "(unknown)"));
         }
 
-        void session(Request &request, StreamResponse &response)
+        void session(Request &request, Response &response)
         {
             Session &session = getSession(request, response);
 
@@ -46,18 +46,18 @@ class MyController : public WebController
             }
         }
 
-        void forbid(Request &request, StreamResponse &response)
+        void forbid(Request &request, Response &response)
         {
             response.setCode(HTTP_FORBIDDEN);
             response << "403 forbidden demo";
         }
 
-        void exception(Request &request, StreamResponse &response)
+        void exception(Request &request, Response &response)
         {
             throw string("Exception example");
         }
 
-        void uploadForm(Request &request, StreamResponse &response)
+        void uploadForm(Request &request, Response &response)
         {
             response << "<h1>File upload demo (don't forget to create a tmp/ directory)</h1>";
             response << "<form enctype=\"multipart/form-data\" method=\"post\">";
@@ -66,7 +66,7 @@ class MyController : public WebController
             response << "</form>";
         }
 
-        void upload(Request &request, StreamResponse &response)
+        void upload(Request &request, Response &response)
         {
             request.handleUploads();
 
@@ -82,25 +82,25 @@ class MyController : public WebController
         void setup()
         {
             // Hello demo
-            addRoute("GET", "/hello", MyController, hello);
-            addRoute("GET", "/", MyController, hello);
-
+            registerRoute("GET", "/hello", new RequestHandler<MyController>(this, &MyController::hello));
+            registerRoute("GET", "/", new RequestHandler<MyController>(this, &MyController::hello));
+            
             // Form demo
-            addRoute("GET", "/form", MyController, form);
-            addRoute("POST", "/form", MyController, formPost);
+            registerRoute("GET", "/form", new RequestHandler<MyController>(this, &MyController::form));
+            registerRoute("POST", "/form", new RequestHandler<MyController>(this, &MyController::formPost));
 
             // Session demo
-            addRoute("GET", "/session", MyController, session);
+            registerRoute("GET", "/session", new RequestHandler<MyController>(this, &MyController::session));
 
             // Exception example
-            addRoute("GET", "/exception", MyController, exception);
+            registerRoute("GET", "/exception", new RequestHandler<MyController>(this, &MyController::exception));
 
             // 403 demo
-            addRoute("GET", "/403", MyController, forbid);
+            registerRoute("GET", "/403", new RequestHandler<MyController>(this, &MyController::forbid));
 
             // File upload demo
-            addRoute("GET", "/upload", MyController, uploadForm);
-            addRoute("POST", "/upload", MyController, upload);
+            registerRoute("GET", "/upload", new RequestHandler<MyController>(this, &MyController::uploadForm));
+            registerRoute("POST", "/upload", new RequestHandler<MyController>(this, &MyController::upload));
         }
 };
 

@@ -4,7 +4,7 @@
 #include <mongoose-cpp/Request.h>
 #include <mongoose-cpp/Response.h>
 #include <mongoose-cpp/WebController.h>
-#include <mongoose-cpp/JsonResponse.h>
+#include <mongoose-cpp/Response.h>
 
 using namespace std;
 
