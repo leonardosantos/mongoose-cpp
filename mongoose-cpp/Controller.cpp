@@ -67,10 +67,11 @@ Response *Controller::handleRequest(Request &request) {
 
 void Controller::setPrefix(string prefix_) { prefix = prefix_; }
 
-void Controller::registerRoute(string httpMethod, string route, Callback callback) {
+Callback Controller::route(string httpMethod, string route, Callback callback) {
     string key = httpMethod + ":" + prefix + route + "/?";
     routes[key] = callback;
     urls.push_back(prefix + route);
+    return callback;
 }
 
 void Controller::dumpRoutes() {
