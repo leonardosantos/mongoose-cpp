@@ -21,7 +21,7 @@ class MONGOOSE_CPP_EXPORT Response :
 #endif
     public ostringstream {
    public:
-    enum codes { OK = 200, NOT_FOUND = 404, FORBIDDEN = 403, SERVER_ERROR = 500 };
+    enum codes { OK = 200, NOT_FOUND = 404, FORBIDDEN = 403, SERVER_ERROR = 500, BAD_REQUEST = 401 };
     Response();
     ~Response();
 
