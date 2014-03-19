@@ -28,23 +28,23 @@ class MyController : public WebController
             };
 
             // Hello demo
-            registerRoute("GET", "/hello", hello);
-            registerRoute("GET", "/", hello);
+            route("GET", "/hello", hello);
+            route("GET", "/", hello);
             
             // Form demo
-            registerRoute("GET", "/form", [&](Request &request, Response &response){
+            route("GET", "/form", [&](Request &request, Response &response){
                 response << "<form method=\"post\">" << endl;
                 response << "<input type=\"text\" name=\"test\" /><br >" << endl;
                 response << "<input type=\"submit\" value=\"Envoyer\" />" << endl;
                 response << "</form>" << endl;
             });
 
-            registerRoute("POST", "/form", [&](Request &request, Response &response){
+            route("POST", "/form", [&](Request &request, Response &response){
                 response << "Test=" << htmlEntities(request.get("test", "(unknown)"));
             });
 
             // Session demo
-            registerRoute("GET", "/session", [&](Request &request, Response &response){
+            route("GET", "/session", [&](Request &request, Response &response){
                 Session &session = getSession(request, response);
 
                 if (session.hasValue("try")) {
@@ -58,22 +58,22 @@ class MyController : public WebController
             });
 
             // Exception example
-            registerRoute("GET", "/exception", [&](Request &request, Response &response){
+            route("GET", "/exception", [&](Request &request, Response &response){
                 throw string("Exception example");
             });
 
             // 403 demo
-            registerRoute("GET", "/403", std::bind(&MyController::forbid, this, std::placeholders::_1, std::placeholders::_2));
+            route("GET", "/403", std::bind(&MyController::forbid, this, std::placeholders::_1, std::placeholders::_2));
 
             // File upload demo
-            registerRoute("GET", "/upload", [&](Request &request, Response &response){
+            route("GET", "/upload", [&](Request &request, Response &response){
                 response << "<h1>File upload demo (don't forget to create a tmp/ directory)</h1>";
                 response << "<form enctype=\"multipart/form-data\" method=\"post\">";
                 response << "Choose a file to upload: <input name=\"file\" type=\"file\" /><br />";
                 response << "<input type=\"submit\" value=\"Upload File\" />";
                 response << "</form>";
             });
-            registerRoute("POST", "/upload", [&](Request &request, Response &response){
+            route("POST", "/upload", [&](Request &request, Response &response){
                 request.handleUploads();
 
                 // Iterate through all the uploaded files

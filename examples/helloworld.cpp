@@ -17,7 +17,7 @@ class MyController : public WebController
 
         void setup()
         {
-            registerRoute("GET", "/hello", [&](Request &request, Response &response){
+            route("GET", "/hello", [&](Request &request, Response &response){
                 response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
             });
         }

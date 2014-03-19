@@ -27,8 +27,8 @@ class MyController : public JsonController
             };
 
             // Hello demo
-            registerRoute("GET", "/", hello);
-            registerRoute("GET", "/hello", hello);
+            route("GET", "/", hello);
+            route("GET", "/hello", hello);
         }
 };
 
