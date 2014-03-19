@@ -2,10 +2,10 @@
 #define _MONGOOSE_CPP_CONTROLLER_H
 
 #include <map>
+#include <functional>
 #include <iostream>
 #include <mongoose-cpp/Common.h>
 #include <mongoose-cpp/Request.h>
-#include <mongoose-cpp/RequestHandler.h>
 #include <mongoose-cpp/Response.h>
 #include <mongoose-cpp/WebSocket.h>
 
@@ -16,6 +16,8 @@
  * the requests
  */
 namespace Mongoose {
+
+typedef std::function<void(Request& request, Response& response)> Callback;
 
 class Server;
 
@@ -96,7 +98,7 @@ class MONGOOSE_CPP_EXPORT Controller {
      * @param string the route path
      * @param RequestHandlerBase the request handler for this route
      */
-    virtual void registerRoute(string httpMethod, string route, RequestHandlerBase *handler);
+    virtual void registerRoute(string httpMethod, string route, Callback callback);
 
     /**
      * Initializes the route and settings
@@ -137,8 +139,19 @@ class MONGOOSE_CPP_EXPORT Controller {
    protected:
     Server *server;
     string prefix;
-    map<string, RequestHandlerBase *> routes;
+    map<string, Callback> routes;
     vector<string> urls;
+     
+    /**
+     * Gets the appropriate callback for the request
+     *
+     * @param method HTTP
+     * @param url of the request
+     *
+     * @return the corresponding callback
+     */
+    Callback resolve(string method, string url);
+
 };
 
 }  // namespace Mongoose

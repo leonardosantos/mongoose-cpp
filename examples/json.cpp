@@ -9,26 +9,26 @@ using namespace Mongoose;
 
 class MyController : public JsonController
 {
-    public: 
-        void hello(Request &request, Response &response)
-        {
-            int i;
-
-            for (i=0; i<12; i++) {
-                response["users"][i]["Name"] = "Bob";
-            }
-
-            response["timestamp"] = (int)time(NULL);
-        }
+    public:
  
         void setup()
         {
             // Example of prefix, putting all the urls into "/api"
             setPrefix("/api");
 
+            auto hello = [&](Request &request, Response &response){
+                int i;
+
+                for (i=0; i<12; i++) {
+                    response["users"][i]["Name"] = "Bob";
+                }
+
+                response["timestamp"] = (int)time(NULL);
+            };
+
             // Hello demo
-            registerRoute("GET", "/", new RequestHandler<MyController>(this, &MyController::hello));
-            registerRoute("GET", "/hello", new RequestHandler<MyController>(this, &MyController::hello));
+            registerRoute("GET", "/", hello);
+            registerRoute("GET", "/hello", hello);
         }
 };
 

@@ -14,14 +14,12 @@ using namespace Mongoose;
 class MyController : public WebController
 {
     public: 
-        void hello(Request &request, Response &response)
-        {
-            response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
-        }
 
         void setup()
         {
-            registerRoute("GET", "/hello", new RequestHandler<MyController>(this, &MyController::hello));
+            registerRoute("GET", "/hello", [&](Request &request, Response &response){
+                response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
+            });
         }
 };
 

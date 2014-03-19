@@ -4,9 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-#ifdef ENABLE_REGEX_URL
 #include <regex>
-#endif
 #ifdef HAS_JSONCPP
 #include <json/json.h>
 #endif
@@ -89,11 +87,8 @@ class MONGOOSE_CPP_EXPORT Request {
     string getUrl();
     string getMethod();
     string getData();
-
-#ifdef ENABLE_REGEX_URL
     smatch getMatches();
     bool match(string pattern);
-#endif
     bool readVariable(const char *data, string key, string &output);
 
     /**
@@ -109,10 +104,8 @@ class MONGOOSE_CPP_EXPORT Request {
     string url;
     string data;
     struct mg_connection *connection;
-#ifdef ENABLE_REGEX_URL
     string key;
     smatch matches;
-#endif
 };
 }
 

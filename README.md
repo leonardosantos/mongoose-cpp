@@ -35,14 +35,11 @@ using namespace Mongoose;
 class MyController : public WebController
 {
     public: 
-        void hello(Request &request, Response &response)
-        {
-            response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
-        }
 
-        void setup()
-        {
-            registerRoute("GET", "/hello", new RequestHandler<MyController>(this, &MyController::hello));
+        void setup(){
+            registerRoute("GET", "/hello", [&](Request &request, Response &response){
+                response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
+            });
         }
 };
 
@@ -84,8 +81,6 @@ set with cmake (which is the default). `websocket.cpp` will be compiled to the
 `WebSocket*` clients can be keeped to dispatch data to them, which can be really
 useful to push data to some clients.
 
-To enable url regex matching dispatcher use `-DENABLE_REGEX_URL=ON` option.
-Note that this depends on C++11.
 
 # Development
 

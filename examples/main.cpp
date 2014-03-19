@@ -14,93 +14,76 @@ using namespace Mongoose;
 class MyController : public WebController
 {
     public: 
-        void hello(Request &request, Response &response)
-        {
-            response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
-        }
 
-        void form(Request &request, Response &response)
-        {
-            response << "<form method=\"post\">" << endl;
-            response << "<input type=\"text\" name=\"test\" /><br >" << endl;
-            response << "<input type=\"submit\" value=\"Envoyer\" />" << endl;
-            response << "</form>" << endl;
-        }
-
-        void formPost(Request &request, Response &response)
-        {
-            response << "Test=" << htmlEntities(request.get("test", "(unknown)"));
-        }
-
-        void session(Request &request, Response &response)
-        {
-            Session &session = getSession(request, response);
-
-            if (session.hasValue("try")) {
-                response << "Session value: " << session.get("try");
-            } else {
-                ostringstream val;
-                val << time(NULL);
-                session.setValue("try", val.str());
-                response << "Session value set to: " << session.get("try");
-            }
-        }
-
-        void forbid(Request &request, Response &response)
-        {
-            response.setCode(HTTP_FORBIDDEN);
+        void forbid(Request &request, Response &response){
+            response.setCode(403); //HTTP_FORBIDDEN
             response << "403 forbidden demo";
-        }
-
-        void exception(Request &request, Response &response)
-        {
-            throw string("Exception example");
-        }
-
-        void uploadForm(Request &request, Response &response)
-        {
-            response << "<h1>File upload demo (don't forget to create a tmp/ directory)</h1>";
-            response << "<form enctype=\"multipart/form-data\" method=\"post\">";
-            response << "Choose a file to upload: <input name=\"file\" type=\"file\" /><br />";
-            response << "<input type=\"submit\" value=\"Upload File\" />";
-            response << "</form>";
-        }
-
-        void upload(Request &request, Response &response)
-        {
-            request.handleUploads();
-
-            // Iterate through all the uploaded files
-            vector<UploadFile>::iterator it = request.uploadFiles.begin();
-            for (; it != request.uploadFiles.end(); it++) {
-                UploadFile file = *it;
-                file.saveTo("tmp/");
-                response << "Uploaded file: " << file.getName() << endl;
-            }
         }
 
         void setup()
         {
+
+            auto hello = [&](Request &request, Response &response){
+                response << "Hello " << htmlEntities(request.get("name", "... what's your name ?")) << endl;
+            };
+
             // Hello demo
-            registerRoute("GET", "/hello", new RequestHandler<MyController>(this, &MyController::hello));
-            registerRoute("GET", "/", new RequestHandler<MyController>(this, &MyController::hello));
+            registerRoute("GET", "/hello", hello);
+            registerRoute("GET", "/", hello);
             
             // Form demo
-            registerRoute("GET", "/form", new RequestHandler<MyController>(this, &MyController::form));
-            registerRoute("POST", "/form", new RequestHandler<MyController>(this, &MyController::formPost));
+            registerRoute("GET", "/form", [&](Request &request, Response &response){
+                response << "<form method=\"post\">" << endl;
+                response << "<input type=\"text\" name=\"test\" /><br >" << endl;
+                response << "<input type=\"submit\" value=\"Envoyer\" />" << endl;
+                response << "</form>" << endl;
+            });
+
+            registerRoute("POST", "/form", [&](Request &request, Response &response){
+                response << "Test=" << htmlEntities(request.get("test", "(unknown)"));
+            });
 
             // Session demo
-            registerRoute("GET", "/session", new RequestHandler<MyController>(this, &MyController::session));
+            registerRoute("GET", "/session", [&](Request &request, Response &response){
+                Session &session = getSession(request, response);
+
+                if (session.hasValue("try")) {
+                    response << "Session value: " << session.get("try");
+                } else {
+                    ostringstream val;
+                    val << time(NULL);
+                    session.setValue("try", val.str());
+                    response << "Session value set to: " << session.get("try");
+                }
+            });
 
             // Exception example
-            registerRoute("GET", "/exception", new RequestHandler<MyController>(this, &MyController::exception));
+            registerRoute("GET", "/exception", [&](Request &request, Response &response){
+                throw string("Exception example");
+            });
 
             // 403 demo
-            registerRoute("GET", "/403", new RequestHandler<MyController>(this, &MyController::forbid));
+            registerRoute("GET", "/403", std::bind(&MyController::forbid, this, std::placeholders::_1, std::placeholders::_2));
 
             // File upload demo
-            registerRoute("GET", "/upload", new RequestHandler<MyController>(this, &MyController::uploadForm));
-            registerRoute("POST", "/upload", new RequestHandler<MyController>(this, &MyController::upload));
+            registerRoute("GET", "/upload", [&](Request &request, Response &response){
+                response << "<h1>File upload demo (don't forget to create a tmp/ directory)</h1>";
+                response << "<form enctype=\"multipart/form-data\" method=\"post\">";
+                response << "Choose a file to upload: <input name=\"file\" type=\"file\" /><br />";
+                response << "<input type=\"submit\" value=\"Upload File\" />";
+                response << "</form>";
+            });
+            registerRoute("POST", "/upload", [&](Request &request, Response &response){
+                request.handleUploads();
+
+                // Iterate through all the uploaded files
+                vector<UploadFile>::iterator it = request.uploadFiles.begin();
+                for (; it != request.uploadFiles.end(); it++) {
+                    UploadFile file = *it;
+                    file.saveTo("tmp/");
+                    response << "Uploaded file: " << file.getName() << endl;
+                }
+            });
         }
 };
 

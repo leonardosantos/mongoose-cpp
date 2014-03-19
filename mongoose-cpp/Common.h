@@ -17,4 +17,8 @@
   #define MONGOOSE_CPP_EXPORT
 #endif
 
+struct UnknownRequest : std::exception {
+  const char* what() const throw() {return "Unknown request url";}
+};
+
 #endif
