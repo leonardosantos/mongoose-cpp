@@ -95,11 +95,11 @@ class MONGOOSE_CPP_EXPORT Controller {
     /**
      * Registers a route to the controller
      *
-     * @param string the route method
-     * @param string the route path
+     * @param string the method
+     * @param string the url path
      * @param Callback the request handler for this route
      */
-    virtual Callback route(string httpMethod, string route, Callback callback);
+    virtual Callback route(string httpMethod, string url, Callback callback);
 
     /**
      * Initializes the route and settings
