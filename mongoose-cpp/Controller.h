@@ -95,8 +95,9 @@ class MONGOOSE_CPP_EXPORT Controller {
     /**
      * Registers a route to the controller
      *
+     * @param string the route method
      * @param string the route path
-     * @param RequestHandlerBase the request handler for this route
+     * @param Callback the request handler for this route
      */
     virtual Callback route(string httpMethod, string route, Callback callback);
 
