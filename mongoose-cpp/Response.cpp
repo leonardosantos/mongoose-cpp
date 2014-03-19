@@ -5,7 +5,7 @@ using namespace std;
 
 namespace Mongoose {
 
-Response::Response() : code(200), headers(), humanReadable(false) {};  // HTTP_OK
+Response::Response() : code(Response::codes::OK), headers(), humanReadable(false) {};
 Response::~Response() {}
 
 void Response::setHeader(string key, string value) { headers[key] = value; }

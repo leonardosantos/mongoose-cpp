@@ -16,7 +16,7 @@ class MyController : public WebController
     public: 
 
         void forbid(Request &request, Response &response){
-            response.setCode(403); //HTTP_FORBIDDEN
+            response.setCode(Response::codes::FORBIDDEN);
             response << "403 forbidden demo";
         }
 

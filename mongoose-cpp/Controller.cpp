@@ -81,8 +81,8 @@ void Controller::dumpRoutes() {
 Response *Controller::serverInternalError(string message) {
     Response *response = new Response;
 
-    response->setCode(500);  // HTTP_SERVER_ERROR
-    *response << "[500] Server internal error: " << message;
+    response->setCode(Response::codes::SERVER_ERROR);
+    *response << "500 Server internal error: " << message;
 
     return response;
 }
