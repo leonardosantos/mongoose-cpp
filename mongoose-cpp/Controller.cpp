@@ -16,13 +16,11 @@ void Controller::webSocketReady(WebSocket *websocket) {}
 
 void Controller::webSocketData(WebSocket *websocket, string data) {}
 
-Controller::~Controller() {
-    routes.clear();
-}
+Controller::~Controller() { routes.clear(); }
 
 Callback Controller::resolve(string method, string url) {
     if (url.back() == '/')
-      url.pop_back();
+        url.pop_back();
     string key = method + ":" + url;
     smatch matches;
     for (auto it = routes.begin(); it != routes.end(); it++)
@@ -43,12 +41,12 @@ bool Controller::handles(string method, string url) {
 
 Response *Controller::process(Request &request) {
     Response *response = new Response();
-    for (auto it = routes.begin(); it != routes.end(); it++) {
+    for (auto it = routes.begin(); it != routes.end(); it++)
         if (request.match(it->first)) {
+            preProcess(request, *response);
             it->second(request, *response);
             break;
         }
-    }
     return response;
 }
 
